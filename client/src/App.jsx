@@ -7,6 +7,7 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { Outlet } from 'react-router-dom';
+import { Container, Box } from '@mui/material';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -38,13 +39,13 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <div className="flex-column justify-flex-start min-100-vh">
+      <Box sx={{ display: 'flex', minHeight: '100vh', flexDirection: 'column' }}>
         <Header />
-        <div className="container">
+        <Container sx={{ display: 'flex',  flexDirection: 'column', flexGrow: 1 }}>
           <Outlet />
-        </div>
+        </Container>
         <Footer />
-      </div>
+      </Box>
     </ApolloProvider>
   );
 }
