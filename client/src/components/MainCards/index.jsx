@@ -1,4 +1,4 @@
-import { Container, Typography, Card, CardContent, Button, CircularProgress, Grid } from '@mui/material';
+import { Container, Typography, Card, CardContent, CardMedia, Button, CircularProgress, Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 const MainCards = () => {
@@ -12,11 +12,14 @@ const MainCards = () => {
   }, [currentPage]);
 
   const fetchCards = (page) => {
+    console.log(page, cardsPerPage);
     setLoading(true);
-    fetch(`http://api.lorcana-api.com/cards/fetch?displayonly=Image&page=${page}&limit=${cardsPerPage}`)
+    fetch(`https://api.lorcana-api.com/cards/fetch?page=${page}&pagesize=${cardsPerPage}`)
       .then(response => response.json())
       .then(data => {
+        console.log(data);
         setCards(data);
+        console.log(cards);
         setLoading(false);
       })
       .catch(error => {
@@ -43,16 +46,16 @@ const MainCards = () => {
   return (
     <Container>
         <Grid container spacing={3}>
-          {cards.map((card, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+          {cards.map((card) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={card.Card_Num}>
               <Card>
                 <CardContent>
-                  <img
-                    src={card.image}
-                    alt={card.name}
-                    onError={handleImageError}
-                    style={{ width: '100%' }}
-                  />
+                <CardMedia
+                                component="img"
+                                image={card.Image}
+                                alt={card.Name}
+                                sx={{ width: '100%', height: "100%" }}
+                            />
                 </CardContent>
               </Card>
             </Grid>
