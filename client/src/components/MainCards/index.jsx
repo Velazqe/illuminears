@@ -1,14 +1,56 @@
 import { Container, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 
 const MainCards = () => {
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [cardsPerPage] = useState(20);
 
-    return (
-      <Container sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'column', backgroundColor: 'background.secondary' }}>
-         <Typography variant="h1" component="h1" sx={{ marginTop: '20px'}}>
-         Main Card Content
-        </Typography>      
-      </Container>
-    );
+  useEffect(() => {
+    fetchCards(currentPage);
+  }, [currentPage]);
+
+  const fetchCards = (page) => {
+    setLoading(true);
+    fetch(`http://api.lorcana-api.com/cards/fetch?displayonly=Image&page=${page}&limit=${cardsPerPage}`)
+      .then(response => response.json())
+      .then(data => {
+        setCards(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
   };
-  
-  export default MainCards;
+
+  const handleNextPage = () => {
+    setCurrentPage(prevPage => prevPage + 1);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };
+
+  return (
+    <div>
+      <div>
+        {cards.map((card, index) => (
+          <div key={index} style={{  }}>
+            <img src={card.image} alt={card.name} style={{ }} />
+          </div>
+        ))}
+      </div>
+      <div>
+        <button onClick={handlePreviousPage} disabled={currentPage === 1}>Previous</button>
+        <span> Page {currentPage} </span>
+        <button onClick={handleNextPage}>Next</button>
+      </div>
+    </div>
+  );
+};
+
+export default MainCards;
