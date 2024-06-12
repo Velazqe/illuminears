@@ -12,7 +12,7 @@ export default function Navbar() {
   return (
     <AppBar position="static" >
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant="h4" color="inherit" component={Link} to="/" sx={{ flexGrow: 1 }}>
           Illuminears Quest
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
