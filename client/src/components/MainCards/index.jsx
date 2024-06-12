@@ -1,5 +1,4 @@
-
-import { Container, Typography, Card, CardContent } from '@mui/material';
+import { Container, Typography, Card, CardContent, Button, CircularProgress, Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 const MainCards = () => {
@@ -7,7 +6,6 @@ const MainCards = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage] = useState(20);
-
 
   useEffect(() => {
     fetchCards(currentPage);
@@ -37,21 +35,39 @@ const MainCards = () => {
     }
   };
 
+  const handleImageError = (event) => {
+    event.target.src = '../../../public/vite.svg'; 
+    // Random placeholder for now to see if they load
+  };
+
   return (
-    <div>
-      <div>
-        {cards.map((card, index) => (
-          <div key={index} style={{  }}>
-            <img src={card.image} alt={card.name} style={{ }} />
-          </div>
-        ))}
+    <Container>
+        <Grid container spacing={3}>
+          {cards.map((card, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+              <Card>
+                <CardContent>
+                  <img
+                    src={card.image}
+                    alt={card.name}
+                    onError={handleImageError}
+                    style={{ width: '100%' }}
+                  />
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+        <Button variant="contained" onClick={handlePreviousPage} disabled={currentPage === 1}>
+          Previous
+        </Button>
+        <Typography variant="body1"> Page {currentPage} </Typography>
+        <Button variant="contained" onClick={handleNextPage}>
+          Next
+        </Button>
       </div>
-      <div>
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}>Previous</button>
-        <span> Page {currentPage} </span>
-        <button onClick={handleNextPage}>Next</button>
-      </div>
-    </div>
+    </Container>
   );
 };
 
