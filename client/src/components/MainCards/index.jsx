@@ -1,4 +1,5 @@
-import { Container, Typography } from '@mui/material';
+
+import { Container, Typography, Card, CardContent } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 const MainCards = () => {
@@ -6,6 +7,7 @@ const MainCards = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage] = useState(20);
+
 
   useEffect(() => {
     fetchCards(currentPage);
