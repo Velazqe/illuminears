@@ -1,11 +1,11 @@
 import { Container, Typography, Card, CardContent } from '@mui/material';
 
-const MainCards = () => {
+const NewCards = () => {
 
     return (
       <Container sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'column', backgroundColor: 'background.secondary' }}>
          <Typography variant="h1" component="h1" sx={{ marginTop: '20px'}}>
-         Main Card Content
+         New Card Content
         </Typography> 
         <Card sx={{ backgroundColor: 'primary.main' }}>
           <CardContent>
@@ -18,4 +18,4 @@ const MainCards = () => {
     );
   };
   
-  export default MainCards;
+  export default NewCards;
