@@ -20,18 +20,32 @@ export default function Navbar() {
             sx={currentPage === '/cards' ? { color: 'secondary.main' } : {}}>
             Cards
           </Button>
-          <Button color="inherit" component={Link} to="/builder"
+          {Auth.loggedIn() ? (
+            <>
+            <Button color="inherit" component={Link} to="/builder"
             sx={currentPage === '/builder' ? { color: 'secondary.main' } : {}}>
             Deck Builder
           </Button>
           <Button color="inherit" component={Link} to="/profile"
             sx={currentPage === '/profile' ? { color: 'secondary.main' } : {}}>
-            Profile
+            {Auth.getProfile().data.username}'s Decks
           </Button>
-          <Button color="inherit" component={Link} to="/logout"
-            sx={currentPage === '/logout' ? { color: 'secondary.main' } : {}}>
+          <Button color="inherit" onClick={logout}>
             Logout
           </Button>
+          </>
+        ) : (
+          <>
+          <Button color="inherit" component={Link} to="/login"
+            sx={currentPage === '/login' ? { color: 'secondary.main' } : {}}>
+            Login
+          </Button>
+          <Button color="inherit" component={Link} to="/signup"
+            sx={currentPage === '/signup' ? { color: 'secondary.main' } : {}}>
+            Signup
+          </Button>
+          </>
+        )}          
         </Box>
       </Toolbar>
     </AppBar>
