@@ -1,11 +1,20 @@
-import { Container, Typography, Card, CardContent, CardMedia, Button, CircularProgress, Grid } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Container, Typography, Card, CardContent, CardMedia, Button, Modal, Grid, Box } from '@mui/material';
+import React, { useEffect, useState, useRef } from 'react';
 
 const MainCards = () => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage] = useState(20);
+  const [openCard, setOpenCard] = useState(null);
+
+  const handleOpenCard = (card) => setOpenCard(card);
+
+  const handleCloseCard = () => {
+    // Add a timeout before setting openCard to null
+    setTimeout(() => setOpenCard(null), 1500); 
+  }; 
+  const cardRef = useRef(null);
 
   useEffect(() => {
     fetchCards(currentPage);
@@ -45,7 +54,11 @@ const MainCards = () => {
         <Grid container spacing={3}>
           {cards.map((card) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={card.Card_Num}>
-              <Card sx={{ width: '100%', height: "100%" }}>
+              <Card className='target-card'
+              sx={{ width: '100%', height: "100%", cursor: 'pointer' }}
+              onMouseEnter={() => handleOpenCard(card)}
+              onMouseLeave={handleCloseCard}
+              ref={cardRef}>
                 <CardContent sx={{ width: '100%', height: "100%", padding: 0, paddingBottom: '0 !important' }}>
                   <CardMedia
                     component="img"
@@ -67,6 +80,24 @@ const MainCards = () => {
           Next
         </Button>
       </div>
+
+      <Modal
+        open={openCard !== null}
+        onClose={handleCloseCard}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '20%', height: '20%' }}>
+          <CardContent sx={{ width: '100%', height: '100%'}}>
+            <CardMedia
+              component="img"
+              image={openCard?.Image}
+              alt={openCard?.Name}
+              sx={{ width: '100%' }}
+            />
+          </CardContent>
+        </Box>
+      </Modal>
     </Container>
   );
 };
