@@ -5,7 +5,7 @@ const Cards = () => {
 
     return (
       <Container sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'column', backgroundColor: 'background.secondary' }}>
-         <MainCards />     
+        <MainCards />     
       </Container>
     );
   };

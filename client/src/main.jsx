@@ -16,8 +16,7 @@ import Builder from "./pages/Builder";
 import Logout from "./pages/Logout";
 
 
-const searchBar = () => {}
-const [searchInput, setSearchInput] = useState("");
+
 const router = createBrowserRouter([
   {
     path: "/",
