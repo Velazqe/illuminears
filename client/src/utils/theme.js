@@ -3,14 +3,14 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#008080', // Base primary color
+      main: '#001F3F', // Base primary color
     },
     secondary: {
-      main: '#00FFFF', // Base secondary color
+      main: '#81D8E6', // Base secondary color
     },
     text: {
-        primary: '#fff', // White for primary text color
-        secondary: '#ccc', // Light gray for secondary text color
+        primary: '#81D8E6', // White for primary text color
+        secondary: '#CCCCCC', // Light gray for secondary text color
       },
     background: {
         default: '#242424', // Set background color to #242424
@@ -21,7 +21,7 @@ const theme = createTheme({
     fontFamily: 'Poppins',
     h1: {
       fontSize: '2rem',
-      color: '#fff'
+      color: '#81D8E6'
     },
   },
 });
