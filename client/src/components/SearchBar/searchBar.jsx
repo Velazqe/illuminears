@@ -8,11 +8,12 @@ const SearchBar = ({ onSearch }) => {
   };
 
   const handleSearch = () => {
+    console.log("Its running");
     onSearch(query);
   };
   
   return (
-    <div>
+    <div className='searchbar'>
       <input
         type="text"
         value={query}
