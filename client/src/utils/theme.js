@@ -3,18 +3,18 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#001F3F', // Base primary color
+      main: '#001F3F', // Dark blue
     },
     secondary: {
-      main: '#81D8E6', // Base secondary color
+      main: '#81D8E6', // Light teal
     },
     text: {
-        primary: '#81D8E6', // White for primary text color
-        secondary: '#CCCCCC', // Light gray for secondary text color
+        primary: '#81D8E6', // Teal for primary text color
+        secondary: '#001F3F', // Light gray for secondary text color
       },
     background: {
-        default: '#242424', // Set background color to #242424
-        secondary: '#343a40',
+        default: '#242424', // dark grey, almost black
+        secondary: '#343a40', // lighter grey
       },
   },
   typography: {
