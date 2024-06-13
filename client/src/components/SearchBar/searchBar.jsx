@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onChange }) => {
   const [query, setQuery] = useState('');
 
   const handleInputChange = (e) => {
@@ -9,7 +9,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearch = () => {
     console.log("Its running");
-    onSearch(query);
+    onChange(query);
   };
   
   return (
