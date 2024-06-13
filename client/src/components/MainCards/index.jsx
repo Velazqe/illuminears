@@ -1,5 +1,6 @@
 import { Container, Typography, Card, CardContent, CardMedia, Button, Modal, Grid, Box } from '@mui/material';
 import React, { useEffect, useState, useRef } from 'react';
+import SearchBar from '../SearchBar/searchBar';
 
 const MainCards = () => {
   const [cards, setCards] = useState([]);
@@ -27,6 +28,19 @@ const MainCards = () => {
       });
   };
 
+  const handleSearch = async (query) => {
+    console.log(query);
+    if (query.trim() === '') return;
+    try {
+      const response = await fetch(`https://api.lorcana-api.com/cards/fetch?search=Name~${query}`);
+      const data = await response.json();
+      console.log(data);
+      setCards(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   const handleNextPage = () => {
     setCurrentPage(prevPage => prevPage + 1);
   };
@@ -44,6 +58,7 @@ const MainCards = () => {
 
   return (
     <Container sx={{ margin: '10px 0px 10px 0px'}}>
+    <SearchBar onChange = {handleSearch}/>
         <Grid container spacing={3}>
           {cards.map((card) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={card.Card_Num}>
