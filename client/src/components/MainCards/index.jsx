@@ -6,14 +6,7 @@ const MainCards = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage] = useState(20);
-  const [openCard, setOpenCard] = useState(null);
-
-  const handleOpenCard = (card) => setOpenCard(card);
-
-  const handleCloseCard = () => {
-    // Add a timeout before setting openCard to null
-    setTimeout(() => setOpenCard(null), 1500); 
-  }; 
+   
   const cardRef = useRef(null);
 
   useEffect(() => {
@@ -60,8 +53,6 @@ const MainCards = () => {
                 transform: 'scale(1.3)', // Enlarge card on hover
                 boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
             },}}
-              // onMouseEnter={() => handleOpenCard(card)}
-              // onMouseLeave={handleCloseCard}
               ref={cardRef}>
                 <CardContent sx={{ width: '100%', height: "100%", padding: 0, paddingBottom: '0 !important' }}>
                   <CardMedia
@@ -84,24 +75,6 @@ const MainCards = () => {
           Next
         </Button>
       </div>
-
-      <Modal
-        open={openCard !== null}
-        onClose={handleCloseCard}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '20%', height: '20%' }}>
-          <CardContent sx={{ width: '100%', height: '100%'}}>
-            <CardMedia
-              component="img"
-              image={openCard?.Image}
-              alt={openCard?.Name}
-              sx={{ width: '100%' }}
-            />
-          </CardContent>
-        </Box>
-      </Modal>
     </Container>
   );
 };

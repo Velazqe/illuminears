@@ -115,7 +115,7 @@ const BuilderCards = () => {
   const groupedSelectedCards = chunkArray(selectedCards, 4);
 
   return (
-    <Container sx={{ margin: '10px 0px 10px 0px'}}>
+    <Container sx={{ margin: '10px 0px 10px 0px' }}>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <Box sx={{ flexGrow: 1 }}>
           {loading ? (
@@ -131,9 +131,9 @@ const BuilderCards = () => {
                       width: '100%', 
                       height: "100%", 
                       cursor: 'pointer',
-                      transition: 'transform 0.8s ease-in-out', // Add transition for smooth effect
+                      transition: 'transform 0.2s ease-in-out', // Add transition for smooth effect
                       '&:hover': {
-                        transform: 'scale(1.2)', // Enlarge card on hover
+                        transform: 'scale(1.3)', // Enlarge card on hover
                         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
                       }
                     }}
@@ -153,7 +153,7 @@ const BuilderCards = () => {
               ))}
             </Grid>
           )}
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
             <Button variant="contained" onClick={handlePreviousPage} disabled={currentPage === 1}>
               Previous
             </Button>
@@ -161,7 +161,7 @@ const BuilderCards = () => {
             <Button variant="contained" onClick={handleNextPage}>
               Next
             </Button>
-          </div>
+          </Box>
         </Box>
         <Box sx={{ marginLeft: '20px' }}>
           {isEditingTitle ? (
@@ -188,7 +188,7 @@ const BuilderCards = () => {
           )}
           {/* Display selected cards with counts */}
           {groupedSelectedCards.map((stack, stackIndex) => (
-            <Box key={`stack-${stackIndex}`} sx={{ marginBottom: '20px' }}>
+            <Box key={`stack-${stackIndex}`} sx={{ marginBottom: '90px' }}>
               {stack.map((selectedCard, index) => (
                 <Card
                   key={`${selectedCard.Card_Num}-${stackIndex}-${index}`}
@@ -199,10 +199,10 @@ const BuilderCards = () => {
                     marginBottom: '10px',
                     cursor: 'pointer',
                     boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                    transition: 'transform 0.8s ease-in-out', 
+                    transition: 'transform 0.2s ease-in-out',                    
                     '&:hover': {
                       transform: 'scale(2.3)', // Enlarge card on hover
-                      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',                      
                     },
                   }}
                   onClick={() => handleRemoveCard(selectedCard)}
@@ -215,14 +215,14 @@ const BuilderCards = () => {
                     sx={{ width: '100%', height: 'auto' }}
                   />
                   {/* Display count of selected cards out of 4 */}
-                  <Typography variant="body2" align="center" mt={1}>
+                  <Typography variant="body2" align="center" mt={1} sx={{ color: 'text.secondary', backgroundColor: 'secondary.main', margin: 0 }}>
                     {`${selectedCard.count} / 4 Selected`}
                   </Typography>
                 </Card>
               ))}
             </Box>
           ))}
-          <div>
+          <Box sx={{ zIndex: 0 }}>
             <Button color="secondary" variant="contained" onClick={handleSave} disabled={selectedCards.length === 0 || saved} sx={{ marginTop: '20px' }}>
               Save
             </Button>
@@ -230,7 +230,7 @@ const BuilderCards = () => {
             <Button variant="contained" color="secondary" onClick={handleClearAll} sx={{ marginTop: '10px' }}>
               Clear All
             </Button>
-          </div>
+          </Box>
         </Box>
       </Box>
     </Container>
