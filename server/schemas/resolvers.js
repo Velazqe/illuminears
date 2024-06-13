@@ -1,23 +1,25 @@
-const { User, Monster } = require("../models");
+const { User, Deck } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
   Query: {
     users: async () => {
-      return User.find().populate("monsters");
+      return User.find()
+      // .populate("decks");
     },
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate("monsters");
+      return User.findOne({ username })
+      // .populate("decks");
     },
-    monsters: async () => {
-      return Monster.find().sort({ name: 1 });
+    decks: async () => {
+      return Deck.find().sort({ name: 1 });
     },
-    monster: async (parent, { monsterId }) => {
-      return Monster.findOne({ _id: monsterId });
+    deck: async (parent, { deckId }) => {
+      return Deck.findOne({ _id: deckId });
     },
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate("comments");
+        return User.findOne({ _id: context.user._id }).populate("decks");
       }
       throw AuthenticationError;
     },
@@ -46,23 +48,21 @@ const resolvers = {
 
       return { token, user };
     },
-    addMonster: async (parent, { monsterName, type, habitat, weaknesses }) => {
-      const monster = await Monster.create({
-        monsterName,
-        type,
-        habitat,
-        weaknesses,
+    addDeck: async (parent, { deckName, cards }) => {
+      const deck = await Deck.create({
+        deckName,
+        cards,
       });
 
-      return monster;
+      return deck;
     },
-    addComment: async (parent, { monsterId, commentText }, context) => {
+    addCard: async (parent, { deckId, image }, context) => {
       if (context.user) {
-        return Monster.findOneAndUpdate(
-          { _id: monsterId },
+        return Deck.findOneAndUpdate(
+          { _id: deckId },
           {
             $addToSet: {
-              comments: { commentText, commentAuthor: context.user.username },
+              cards: { image },
             },
           },
           {
@@ -73,22 +73,21 @@ const resolvers = {
       }
       throw AuthenticationError;
     },
-    removeMonster: async (parent, { monsterId }, context) => {
-      const monster = await Monster.findOneAndDelete({
-        _id: monsterId,
+    removeDeck: async (parent, { deckId }, context) => {
+      const deck = await Deck.findOneAndDelete({
+        _id: deckId,
       });
 
-      return monster;
+      return deck;
     },
-    removeComment: async (parent, { monsterId, commentId }, context) => {
+    removeCard: async (parent, { deckId, cardId }, context) => {
       if (context.user) {
-        return Monster.findOneAndUpdate(
-          { _id: monsterId },
+        return Deck.findOneAndUpdate(
+          { _id: deckId },
           {
             $pull: {
-              comments: {
-                _id: commentId,
-                commentAuthor: context.user.username,
+              cards: {
+                _id: cardId,
               },
             },
           },
@@ -97,25 +96,16 @@ const resolvers = {
       }
       throw AuthenticationError;
     },
-    updateComment: async (parent, { monsterId, commentId, commentText }) => {
-      return Monster.findOneAndUpdate(
-        { _id: monsterId, "comments._id": commentId },
-        { $set: { "comments.$.commentText": commentText } },
-        { new: true }
-      );
-    },
-    updateMonster: async (
+    updateDeck: async (
       parent,
-      { monsterId, monsterName, type, habitat, weaknesses }
+      { deckId, deckName, cards }
     ) => {
       const updateFields = {};
-      if (monsterName) updateFields.monsterName = monsterName;
-      if (type) updateFields.type = type;
-      if (habitat) updateFields.habitat = habitat;
-      if (weaknesses) updateFields.weaknesses = weaknesses;
+      if (deckName) updateFields.deckName = deckName;
+      if (cards) updateFields.cards = cards;
 
       return Monster.findOneAndUpdate(
-        { _id: monsterId },
+        { _id: deckId },
         { $set: updateFields },
         { new: true }
       );
