@@ -6,20 +6,15 @@ const typeDefs = `
     password: String
   }
 
-  type Monster {
+  type Deck {
     _id: ID
-    monsterName: String!
-    type: String!
-    habitat: String!
-    weaknesses: [String]!
-    comments: [Comment]
+    deckName: String!
+    cards: [Card]
   }
 
-  type Comment {
+  type Card {
     _id: ID
-    commentText: String
-    commentAuthor: String
-    createdAt: String
+    image: String!
   }
 
   type Auth {
@@ -30,20 +25,19 @@ const typeDefs = `
   type Query {
     users: [User]
     user(username: String!): User
-    monsters(username: String): [Monster]
-    monster(monsterId: ID!): Monster
+    decks(username: String): [Deck]
+    deck(deckId: ID!): Deck
     me: User
   }
 
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addMonster(monsterName: String!, type: String!, habitat: String!, weaknesses: [String]!): Monster
-    updateMonster(monsterId: ID!, monsterName: String, type: String, habitat: String, weaknesses: [String]): Monster
-      removeMonster(monsterId: ID!): Monster
-    addComment(monsterId: ID!, commentText: String!): Monster
-    updateComment(monsterId: ID!, commentId: ID!, commentText: String!): Monster
-    removeComment(monsterId: ID!, commentId: ID!): Monster
+    addDeck(deckName: String!, cards: [String]!): Deck
+    updateDeck(deckId: ID!, deckName: String, cards: [String]): Deck
+    removeDeck(deckId: ID!): Deck
+    addCard(deckId: ID!, image: String!): Deck
+    removeCard(deckId: ID!, cardId: ID!): Deck
   }
 `;
 

@@ -24,101 +24,58 @@ export const ADD_USER = gql`
   }
 `;
 
-export const ADD_MONSTER = gql`
-  mutation addMonster(
-    $monsterName: String!
-    $type: String!
-    $habitat: String!
-    $weaknesses: [String]!
-  ) {
-    addMonster(
-      monsterName: $monsterName
-      type: $type
-      habitat: $habitat
-      weaknesses: $weaknesses
-    ) {
-      weaknesses
-      habitat
-      type
-      monsterName
+export const ADD_DECK = gql`
+mutation addDeck($deckName: String!, $cards: [String]!) {
+  addDeck(deckName: $deckName, cards: $cards) {
+    _id
+    cards {
       _id
+      image
     }
+    deckName
   }
+}
 `;
 
-export const ADD_COMMENT = gql`
-  mutation addComment($monsterId: ID!, $commentText: String!) {
-    addComment(monsterId: $monsterId, commentText: $commentText) {
+export const ADD_CARD = gql`
+mutation addCard($deckId: ID!, $image: String!) {
+  addCard(deckId: $deckId, image: $image) {
+    _id
+    cards {
       _id
-      comments {
-        _id
-        commentText
-        createdAt
-      }
+      image
     }
+    deckName
   }
+}
 `;
 
-export const REMOVE_MONSTER = gql`
-  mutation removeMonster($monsterId: ID!) {
-    removeMonster(monsterId: $monsterId) {
-      _id
-    }
+export const REMOVE_DECK = gql`
+mutation removeDeck($deckId: ID!) {
+  removeDeck(deckId: $deckId) {
+    _id
   }
+}
 `;
 
-export const REMOVE_COMMENT = gql`
-  mutation removeComment($monsterId: ID!, $commentId: ID!) {
-    removeComment(monsterId: $monsterId, commentId: $commentId) {
-      _id
-      comments {
-        _id
-        commentText
-      }
-    }
+export const REMOVE_CARD = gql`
+mutation removeCard($removeCardDeckId2: ID!, $cardId: ID!) {
+  removeCard(deckId: $removeCardDeckId2, cardId: $cardId) {
+    _id
   }
+}
 `;
 
-export const UPDATE_COMMENT = gql`
-  mutation updateComment(
-    $monsterId: ID!
-    $commentId: ID!
-    $commentText: String!
-  ) {
-    updateComment(
-      monsterId: $monsterId
-      commentId: $commentId
-      commentText: $commentText
-    ) {
-      _id
-      comments {
-        _id
-        commentText
-      }
-    }
-  }
-`;
 
-export const UPDATE_MONSTER = gql`
-  mutation updateMonster(
-    $monsterId: ID!
-    $monsterName: String
-    $type: String
-    $habitat: String
-    $weaknesses: [String]
-  ) {
-    updateMonster(
-      monsterId: $monsterId
-      monsterName: $monsterName
-      type: $type
-      habitat: $habitat
-      weaknesses: $weaknesses
-    ) {
+export const UPDATE_DECK = gql`
+mutation updateDeck($deckId: ID!, $deckName: String, $cards: [String]) {
+  updateDeck(deckId: $deckId, deckName: $deckName, cards: $cards) {
+    _id
+    cards {
       _id
-      monsterName
-      type
-      habitat
-      weaknesses
+      image
     }
+    deckName
   }
+}
 `;

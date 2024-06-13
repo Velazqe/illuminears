@@ -10,40 +10,30 @@ export const QUERY_USER = gql`
   }
 `;
 
-export const QUERY_MONSTERS = gql`
-  query getMonsters {
-    monsters {
+export const QUERY_DECKS = gql`
+query getDecks {
+  decks {
+    _id
+    cards {
       _id
-      monsterName
-      type
-      habitat
-      weaknesses
-      comments {
-        _id
-        commentText
-        commentAuthor
-        createdAt
-      }
+      image
     }
+    deckName
   }
+}
 `;
 
-export const QUERY_SINGLE_MONSTER = gql`
-  query getSingleMonster($monsterId: ID!) {
-    monster(monsterId: $monsterId) {
+export const QUERY_SINGLE_DECK = gql`
+query getSingleDeck($deckId: ID!) {
+  deck(deckId: $deckId) {
+    _id
+    cards {
       _id
-      monsterName
-      type
-      habitat
-      weaknesses
-      comments {
-        _id
-        commentText
-        commentAuthor
-        createdAt
-      }
+      image
     }
+    deckName
   }
+}
 `;
 
 export const QUERY_ME = gql`
