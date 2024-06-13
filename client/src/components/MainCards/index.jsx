@@ -55,9 +55,13 @@ const MainCards = () => {
           {cards.map((card) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={card.Card_Num}>
               <Card className='target-card'
-              sx={{ width: '100%', height: "100%", cursor: 'pointer' }}
-              onMouseEnter={() => handleOpenCard(card)}
-              onMouseLeave={handleCloseCard}
+               sx={{ width: '100%', height: "100%", cursor: 'pointer',
+              transition: 'transform 0.2s ease-in-out','&:hover': {
+                transform: 'scale(1.3)', // Enlarge card on hover
+                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+            },}}
+              // onMouseEnter={() => handleOpenCard(card)}
+              // onMouseLeave={handleCloseCard}
               ref={cardRef}>
                 <CardContent sx={{ width: '100%', height: "100%", padding: 0, paddingBottom: '0 !important' }}>
                   <CardMedia
