@@ -17,6 +17,7 @@ query getDecks {
     cards {
       _id
       image
+      name
     }
     deckName
   }
@@ -30,6 +31,7 @@ query getSingleDeck($deckId: ID!) {
     cards {
       _id
       image
+      name
     }
     deckName
   }
@@ -42,6 +44,14 @@ export const QUERY_ME = gql`
       _id
       username
       email
+      decks {
+      deckName
+      _id
+      cards {
+        _id
+        image
+        name
+      }
     }
   }
 `;

@@ -5,11 +5,11 @@ const resolvers = {
   Query: {
     users: async () => {
       return User.find()
-      // .populate("decks");
+      .populate("decks");
     },
     user: async (parent, { username }) => {
       return User.findOne({ username })
-      // .populate("decks");
+      .populate("decks");
     },
     decks: async () => {
       return Deck.find().sort({ name: 1 });
