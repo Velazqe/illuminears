@@ -4,6 +4,7 @@ import SearchBar from '../SearchBar/searchBar';
 
 const MainCards = () => {
   const [cards, setCards] = useState([]);
+  const [initialCards, setInitialCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage] = useState(20);
@@ -20,6 +21,7 @@ const MainCards = () => {
       .then(response => response.json())
       .then(data => {
         setCards(data);
+        setInitialCards(data);
         setLoading(false);
       })
       .catch(error => {
@@ -41,6 +43,10 @@ const MainCards = () => {
     }
   };
 
+  const clearSearch = () => {
+    setCards(initialCards);
+  };
+
   const handleNextPage = () => {
     setCurrentPage(prevPage => prevPage + 1);
   };
@@ -59,6 +65,9 @@ const MainCards = () => {
   return (
     <Container sx={{ margin: '10px 0px 10px 0px'}}>
     <SearchBar onChange = {handleSearch}/>
+    <Button variant="contained" onClick={clearSearch} style={{ margin: '10px 0' }}>
+        Clear
+      </Button>
         <Grid container spacing={3}>
           {cards.map((card) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={card.Card_Num}>
