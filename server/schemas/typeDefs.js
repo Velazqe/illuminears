@@ -11,6 +11,7 @@ const typeDefs = `
     _id: ID
     deckName: String!
     cards: [Card]
+    user_id: ID!
   }
 
   type Card {
@@ -78,6 +79,7 @@ input CardInput {
     decks(username: String): [Deck]
     deck(deckId: ID!): Deck
     me: User
+    myDecks: [Deck]
   }
 
   type Mutation {

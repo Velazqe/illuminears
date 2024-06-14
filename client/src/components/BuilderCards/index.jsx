@@ -68,10 +68,6 @@ const BuilderCards = () => {
     }
 }
 
-
-// setSelectedCards(...lowercaseKeysData)
-// console.log(selectedCards);
-
   const handleRemoveCard = (card) => {
     const cardIndex = selectedCards.findIndex(item => item.card_num === card.card_num);
 
