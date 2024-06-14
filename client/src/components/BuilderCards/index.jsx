@@ -11,9 +11,10 @@ const BuilderCards = () => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [clickCount, setClickCount] = useState(0);
   const [saved, setSaved] = useState(false); // State to track if cards are saved
+  const [saving, setSaving] = useState(false); // State to track saving process
   const [deckTitle, setDeckTitle] = useState("Your Deck"); // State for deck title
   const [isEditingTitle, setIsEditingTitle] = useState(false); // State for editing title
-  const [addDeck, {error,data}] = useMutation(ADD_DECK);
+  const [addDeck, { error, data }] = useMutation(ADD_DECK);
 
   useEffect(() => {
     fetchCards(currentPage);
@@ -40,9 +41,6 @@ const BuilderCards = () => {
     if (cardIndex === -1) {
       // Card not in selectedCards, add it with count 1
       setSelectedCards([...selectedCards, { ...card, count: 1 }]);
-    //   const lowercaseKeysData = makeKeysLowercase(...selectedCards);
-    //   console.log(lowercaseKeysData);
-      console.log(selectedCards)
       setClickCount(prevCount => prevCount + 1);
     } else if (selectedCards[cardIndex].count < 4) {
       // Card already in selectedCards, increase its count (up to 4)
@@ -50,27 +48,22 @@ const BuilderCards = () => {
       updatedSelectedCards[cardIndex] = { ...updatedSelectedCards[cardIndex], count: updatedSelectedCards[cardIndex].count + 1 };
       setSelectedCards(updatedSelectedCards);
       setClickCount(prevCount => prevCount + 1);
-        
     }
   };
 
   function makeKeysLowercase(data) {
     if (typeof data === 'object' && data !== null) {
-        if (Array.isArray(data)) {
-            return data.map(item => makeKeysLowercase(item));
-        } else {
-            return Object.fromEntries(
-                Object.entries(data).map(([key, value]) => [key.toLowerCase(), makeKeysLowercase(value)])
-            );
-        }
+      if (Array.isArray(data)) {
+        return data.map(item => makeKeysLowercase(item));
+      } else {
+        return Object.fromEntries(
+          Object.entries(data).map(([key, value]) => [key.toLowerCase(), makeKeysLowercase(value)])
+        );
+      }
     } else {
-        return data;
+      return data;
     }
-}
-
-
-// setSelectedCards(...lowercaseKeysData)
-// console.log(selectedCards);
+  }
 
   const handleRemoveCard = (card) => {
     const cardIndex = selectedCards.findIndex(item => item.card_num === card.card_num);
@@ -99,27 +92,28 @@ const BuilderCards = () => {
     }
   };
 
-  const handleSave = () => {
-    // Implement saving logic here (e.g., send selectedCards to a backend API)
-    console.log("Saving selected cards:", selectedCards, deckTitle);
+  const handleSave = async () => {
     try {
-        const {data} = addDeck({variables:{deckName:deckTitle, cards:selectedCards}});
-        console.log(data);
-    } catch (e){
-        console.error(e);    
+      setSaving(true); // Start saving process
+      const { data } = await addDeck({ variables: { deckName: deckTitle, cards: selectedCards } });
+      console.log(data);
+      setSaved(true); // Update state to indicate cards are saved
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSaving(false); // End saving process
     }
-    
-    setSaved(true); // Update state to indicate cards are saved
   };
 
   const handleClearAll = () => {
     setSelectedCards([]);
     setClickCount(0);
     setSaved(false); // Reset saved state
+    setDeckTitle("Your Deck"); 
   };
 
   const handleImageError = (event) => {
-    event.target.src = '../../../public/vite.svg'; 
+    event.target.src = '../../../public/vite.svg';
     // Random placeholder for now to see if they load
   };
 
@@ -132,8 +126,12 @@ const BuilderCards = () => {
   };
 
   const handleTitleBlur = () => {
+    if (deckTitle.trim() === '') {
+      setDeckTitle("Your Deck"); // Reset deck title if empty after blur
+    }
     setIsEditingTitle(false);
   };
+
 
   // Function to chunk array into groups of 4
   const chunkArray = (array, size) => {
@@ -144,13 +142,18 @@ const BuilderCards = () => {
     return chunkedArray;
   };
 
-  // Group selected cards into stacks of 4
-  const groupedSelectedCards = chunkArray(selectedCards, 4);
+  // Categorize selected cards by type
+  const categorizedSelectedCards = {
+    Character: selectedCards.filter(card => card.type === 'Character'),
+    Location: selectedCards.filter(card => card.type === 'Location'),
+    Action: selectedCards.filter(card => card.type === 'Action' || card.type === 'Action - Song'),
+    Item: selectedCards.filter(card => card.type === 'Item')
+  };
 
   return (
-    <Container sx={{ margin: '10px 0px 10px 0px' }}>
+    <Box sx={{ margin: '10px 0px 10px 0px' }}>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ width: '100%', flexGrow: 1 }}>
           {loading ? (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
               <CircularProgress />
@@ -160,9 +163,9 @@ const BuilderCards = () => {
               {cards.map((card) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={card.card_num}>
                   <Card
-                    sx={{ 
-                      width: '100%', 
-                      height: "100%", 
+                    sx={{
+                      width: '100%',
+                      height: "100%",
                       cursor: 'pointer',
                       transition: 'transform 0.2s ease-in-out', // Add transition for smooth effect
                       '&:hover': {
@@ -196,7 +199,7 @@ const BuilderCards = () => {
             </Button>
           </Box>
         </Box>
-        <Box sx={{ marginLeft: '20px' }}>
+        <Box sx={{ marginLeft: '20px', width: '500px' }}>
           {isEditingTitle ? (
             <input
               type="text"
@@ -208,66 +211,69 @@ const BuilderCards = () => {
             />
           ) : (
             <Typography
-              variant="h5"
-              style={{ cursor: 'pointer', marginBottom: '10px' }}
+              variant="h3"
+              style={{ display: 'flex', cursor: 'pointer', marginBottom: '10px', justifyContent: 'center' }}
               onClick={handleEditTitle}
             >
               {deckTitle}
             </Typography>
           )}
-          <Typography variant="body1" sx={{ color: clickCount >= 60 ? 'inherit' : 'red' }}> {clickCount}/60 </Typography>
+          <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center', color: clickCount >= 60 ? 'inherit' : 'red' }}> {clickCount}/60 </Typography>
           {clickCount < 60 && (
-            <Typography variant="body1" sx={{ color: 'red' }}>Invalid Deck</Typography>
-          )}
-          {/* Display selected cards with counts */}
-          {groupedSelectedCards.map((stack, stackIndex) => (
-            <Box key={`stack-${stackIndex}`} sx={{ marginBottom: '90px' }}>
-              {stack.map((selectedCard, index) => (
-                <Card
-                  key={`${selectedCard.card_num}-${stackIndex}-${index}`}
-                  sx={{
-                    width: '100px',
-                    height: 'auto',
-                    marginRight: '10px',
-                    marginBottom: '10px',
-                    cursor: 'pointer',
-                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                    transition: 'transform 0.2s ease-in-out',                    
-                    '&:hover': {
-                      transform: 'scale(2.3)', // Enlarge card on hover
-                      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',                      
-                    },
-                  }}
-                  onClick={() => handleRemoveCard(selectedCard)}
-                >
-                  <CardMedia
-                    component="img"
-                    image={selectedCard.image}
-                    alt={selectedCard.name}
-                    onError={handleImageError}
-                    sx={{ width: '100%', height: 'auto' }}
-                  />
-                  {/* Display count of selected cards out of 4 */}
-                  <Typography variant="body2" align="center" mt={1} sx={{ color: 'text.secondary', backgroundColor: 'secondary.main', margin: 0 }}>
-                    {`${selectedCard.count} / 4 Selected`}
-                  </Typography>
-                </Card>
-              ))}
+            <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center', color: 'red' }}>Invalid Deck</Typography>)}
+            {/* Display selected cards with counts */}
+            {['Character', 'Location', 'Action', 'Item'].map((type) => (
+              <Box key={type} sx={{ marginBottom: '20px' }}>
+                <Typography sx={{ display: 'flex', justifyContent: 'center' }} variant="h4">{type}</Typography>
+                <Grid container spacing={1}>
+                  {categorizedSelectedCards[type].map((selectedCard, index) => (
+                    <Grid item xs={3} key={`${selectedCard.card_num}-${index}`}>
+                      <Card
+                        sx={{
+                          width: '100%',
+                          height: 'auto', // Set a consistent height
+                          cursor: 'pointer',
+                          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                          transition: 'transform 0.2s ease-in-out',
+                          '&:hover': {
+                            transform: 'scale(2.3)', // Enlarge card on hover
+                            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                          },
+                        }}
+                        onClick={() => handleRemoveCard(selectedCard)}
+                      >
+                        <CardMedia
+                          component="img"
+                          image={selectedCard.image}
+                          alt={selectedCard.name}
+                          onError={handleImageError}
+                          sx={{ width: '100%', height: '100%' }}
+                        />
+                        <Typography variant="body2" align="center" mt={1} sx={{ color: 'text.secondary', backgroundColor: 'secondary.main', margin: 0 }}>
+                          {`${selectedCard.count} / 4 Selected`}
+                        </Typography>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            ))}
+            <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: '20px' }}>
+              <Button color="secondary" variant="contained" onClick={handleSave} disabled={selectedCards.length === 0 || saving}>
+                {saving ? <CircularProgress size={24} /> : 'Save'}
+              </Button>
+              {saved && <Typography variant="body1" sx={{ color: 'green', marginTop: '10px', textAlign: 'center' }}>Cards Saved Successfully!</Typography>}
+              <Button variant="contained" color="secondary" onClick={handleClearAll} sx={{ marginTop: '10px' }}>
+                Clear All
+              </Button>
             </Box>
-          ))}
-          <Box sx={{ zIndex: 0 }}>
-            <Button color="secondary" variant="contained" onClick={handleSave} disabled={selectedCards.length === 0 || saved} sx={{ marginTop: '20px' }}>
-              Save
-            </Button>
-            {saved && <Typography variant="body1" sx={{ color: 'green', marginTop: '10' }}>Cards Saved Successfully!</Typography>}
-            <Button variant="contained" color="secondary" onClick={handleClearAll} sx={{ marginTop: '10px' }}>
-              Clear All
-            </Button>
           </Box>
         </Box>
       </Box>
-    </Container>
-  );
-};
+    );
+  };
+  
+  export default BuilderCards;
+  
 
-export default BuilderCards;
+
