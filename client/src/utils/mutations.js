@@ -25,12 +25,34 @@ export const ADD_USER = gql`
 `;
 
 export const ADD_DECK = gql`
-  mutation addDeck($deckName: String!, $cards: [String]) {
+  mutation addDeck($deckName: String!, $cards: [CardInput]) {
     addDeck(deckName: $deckName, cards: $cards) {
       _id
       cards {
         _id
         image
+        artist
+        set_name
+        classifications
+        abilities
+        set_num
+        color
+        franchise
+        image
+        cost
+        inkable
+        type
+        lore
+        rarity
+        flavor_text
+        unique_id
+        card_num
+        body_text
+        willpower
+        card_variants
+        strength
+        set_id
+        count
       }
       deckName
     }
