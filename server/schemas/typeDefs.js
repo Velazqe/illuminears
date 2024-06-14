@@ -4,6 +4,7 @@ const typeDefs = `
     username: String
     email: String
     password: String
+    decks: [Deck]
   }
 
   type Deck {
