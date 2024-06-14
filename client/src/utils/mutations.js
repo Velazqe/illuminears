@@ -25,57 +25,56 @@ export const ADD_USER = gql`
 `;
 
 export const ADD_DECK = gql`
-mutation addDeck($deckName: String!, $cards: [String]!) {
-  addDeck(deckName: $deckName, cards: $cards) {
-    _id
-    cards {
+  mutation addDeck($deckName: String!, $cards: [String]) {
+    addDeck(deckName: $deckName, cards: $cards) {
       _id
-      image
+      cards {
+        _id
+        image
+      }
+      deckName
     }
-    deckName
   }
-}
 `;
 
 export const ADD_CARD = gql`
-mutation addCard($deckId: ID!, $image: String!) {
-  addCard(deckId: $deckId, image: $image) {
-    _id
-    cards {
+  mutation addCard($deckId: ID!, $image: String!) {
+    addCard(deckId: $deckId, image: $image) {
       _id
-      image
+      cards {
+        _id
+        image
+      }
+      deckName
     }
-    deckName
   }
-}
 `;
 
 export const REMOVE_DECK = gql`
-mutation removeDeck($deckId: ID!) {
-  removeDeck(deckId: $deckId) {
-    _id
+  mutation removeDeck($deckId: ID!) {
+    removeDeck(deckId: $deckId) {
+      _id
+    }
   }
-}
 `;
 
 export const REMOVE_CARD = gql`
-mutation removeCard($removeCardDeckId2: ID!, $cardId: ID!) {
-  removeCard(deckId: $removeCardDeckId2, cardId: $cardId) {
-    _id
+  mutation removeCard($removeCardDeckId2: ID!, $cardId: ID!) {
+    removeCard(deckId: $removeCardDeckId2, cardId: $cardId) {
+      _id
+    }
   }
-}
 `;
 
-
 export const UPDATE_DECK = gql`
-mutation updateDeck($deckId: ID!, $deckName: String, $cards: [String]) {
-  updateDeck(deckId: $deckId, deckName: $deckName, cards: $cards) {
-    _id
-    cards {
+  mutation updateDeck($deckId: ID!, $deckName: String, $cards: [String]) {
+    updateDeck(deckId: $deckId, deckName: $deckName, cards: $cards) {
       _id
-      image
+      cards {
+        _id
+        image
+      }
+      deckName
     }
-    deckName
   }
-}
 `;

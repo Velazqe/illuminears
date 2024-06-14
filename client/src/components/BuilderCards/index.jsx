@@ -1,5 +1,7 @@
 import { Container, Typography, Card, CardContent, CardMedia, Button, CircularProgress, Grid, Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { ADD_DECK } from '../../utils/mutations';
 
 const BuilderCards = () => {
   const [cards, setCards] = useState([]);
@@ -11,6 +13,7 @@ const BuilderCards = () => {
   const [saved, setSaved] = useState(false); // State to track if cards are saved
   const [deckTitle, setDeckTitle] = useState("Your Deck"); // State for deck title
   const [isEditingTitle, setIsEditingTitle] = useState(false); // State for editing title
+  const [addDeck, {error,data}] = useMutation(ADD_DECK);
 
   useEffect(() => {
     fetchCards(currentPage);
@@ -21,7 +24,8 @@ const BuilderCards = () => {
     fetch(`https://api.lorcana-api.com/cards/fetch?page=${page}&pagesize=${cardsPerPage}`)
       .then(response => response.json())
       .then(data => {
-        setCards(data);
+        const lowercaseData = makeKeysLowercase(data);
+        setCards(lowercaseData);
         setLoading(false);
       })
       .catch(error => {
@@ -31,11 +35,14 @@ const BuilderCards = () => {
   };
 
   const handleCardClick = (card) => {
-    const cardIndex = selectedCards.findIndex(item => item.Card_Num === card.Card_Num);
+    const cardIndex = selectedCards.findIndex(item => item.card_num === card.card_num);
 
     if (cardIndex === -1) {
       // Card not in selectedCards, add it with count 1
       setSelectedCards([...selectedCards, { ...card, count: 1 }]);
+    //   const lowercaseKeysData = makeKeysLowercase(...selectedCards);
+    //   console.log(lowercaseKeysData);
+      console.log(selectedCards)
       setClickCount(prevCount => prevCount + 1);
     } else if (selectedCards[cardIndex].count < 4) {
       // Card already in selectedCards, increase its count (up to 4)
@@ -43,11 +50,30 @@ const BuilderCards = () => {
       updatedSelectedCards[cardIndex] = { ...updatedSelectedCards[cardIndex], count: updatedSelectedCards[cardIndex].count + 1 };
       setSelectedCards(updatedSelectedCards);
       setClickCount(prevCount => prevCount + 1);
+        
     }
   };
 
+  function makeKeysLowercase(data) {
+    if (typeof data === 'object' && data !== null) {
+        if (Array.isArray(data)) {
+            return data.map(item => makeKeysLowercase(item));
+        } else {
+            return Object.fromEntries(
+                Object.entries(data).map(([key, value]) => [key.toLowerCase(), makeKeysLowercase(value)])
+            );
+        }
+    } else {
+        return data;
+    }
+}
+
+
+// setSelectedCards(...lowercaseKeysData)
+// console.log(selectedCards);
+
   const handleRemoveCard = (card) => {
-    const cardIndex = selectedCards.findIndex(item => item.Card_Num === card.Card_Num);
+    const cardIndex = selectedCards.findIndex(item => item.card_num === card.card_num);
 
     if (cardIndex !== -1) {
       const updatedSelectedCards = [...selectedCards];
@@ -75,7 +101,14 @@ const BuilderCards = () => {
 
   const handleSave = () => {
     // Implement saving logic here (e.g., send selectedCards to a backend API)
-    console.log("Saving selected cards:", selectedCards);
+    console.log("Saving selected cards:", selectedCards, deckTitle);
+    try {
+        const {data} = addDeck({variables:{deckName:deckTitle, cards:selectedCards}});
+        console.log(data);
+    } catch (e){
+        console.error(e);    
+    }
+    
     setSaved(true); // Update state to indicate cards are saved
   };
 
@@ -125,7 +158,7 @@ const BuilderCards = () => {
           ) : (
             <Grid container spacing={3}>
               {cards.map((card) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={card.Card_Num}>
+                <Grid item xs={12} sm={6} md={4} lg={3} key={card.card_num}>
                   <Card
                     sx={{ 
                       width: '100%', 
@@ -142,8 +175,8 @@ const BuilderCards = () => {
                     <CardContent sx={{ width: '100%', height: "100%", padding: 0, paddingBottom: '0 !important' }}>
                       <CardMedia
                         component="img"
-                        image={card.Image}
-                        alt={card.Name}
+                        image={card.image}
+                        alt={card.name}
                         onError={handleImageError}
                         sx={{ width: '100%', height: "100%" }}
                       />
@@ -191,7 +224,7 @@ const BuilderCards = () => {
             <Box key={`stack-${stackIndex}`} sx={{ marginBottom: '90px' }}>
               {stack.map((selectedCard, index) => (
                 <Card
-                  key={`${selectedCard.Card_Num}-${stackIndex}-${index}`}
+                  key={`${selectedCard.card_num}-${stackIndex}-${index}`}
                   sx={{
                     width: '100px',
                     height: 'auto',
@@ -209,8 +242,8 @@ const BuilderCards = () => {
                 >
                   <CardMedia
                     component="img"
-                    image={selectedCard.Image}
-                    alt={selectedCard.Name}
+                    image={selectedCard.image}
+                    alt={selectedCard.name}
                     onError={handleImageError}
                     sx={{ width: '100%', height: 'auto' }}
                   />
