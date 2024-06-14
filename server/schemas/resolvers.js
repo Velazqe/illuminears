@@ -23,6 +23,12 @@ const resolvers = {
       }
       throw AuthenticationError;
     },
+    myDecks: async (parent, args, context) => {
+      if (context.user) {
+        return Deck.find({ user_id: context.user._id }).sort({ name: 1 }); 
+      }
+      throw AuthenticationError;
+    },
   },
 
   Mutation: {
@@ -48,12 +54,14 @@ const resolvers = {
 
       return { token, user };
     },
-    addDeck: async (parent, { deckName, cards }) => {
+    addDeck: async (parent, { deckName, cards }, context) => {
+      
       const deck = await Deck.create({
         deckName,
-        cards
+        cards,
+        user_id: context.user._id,
       });
-
+      console.log(deck);
       return deck;
     },
     addCard: async (parent, { deckId, image }, context) => {
