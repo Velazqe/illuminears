@@ -51,7 +51,7 @@ const resolvers = {
     addDeck: async (parent, { deckName, cards }) => {
       const deck = await Deck.create({
         deckName,
-        cards,
+        cards
       });
 
       return deck;
@@ -114,3 +114,29 @@ const resolvers = {
 };
 
 module.exports = resolvers;
+
+// cards.map((card) => {
+//   return {
+//     _id: card._id, // Assuming you have an ID field for the card in your data model
+//     // artist: card.Artist,
+//     // set_name: card.Set_name,
+//     // classifications: card.Classifications,
+//     // abilities: card.Abilities,
+//     // set_num: card.Set_Num,
+//     // color: card.Color,
+//     // franchise: card.Franchise,
+//     image: card.Image,
+//     // cost: card.Cost,
+//     // inkable: card.Inkable,
+//     // name: card.Name,
+//     // type: card.Type,
+//     // lore: card.Lore,
+//     // rarity: card.Rarity,
+//     // unique_id: card.Unique_ID,
+//     // card_num: card.Card_Num,
+//     // body_text: card.Body_Text,
+//     // willpower: card.Willpower,
+//     // strength: card.Strength,
+//     // set_id: card.Set_ID, // Case-sensitive matching for Set_ID
+//   };
+// }),
