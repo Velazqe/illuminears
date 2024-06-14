@@ -112,7 +112,7 @@ const resolvers = {
       if (deckName) updateFields.deckName = deckName;
       if (cards) updateFields.cards = cards;
 
-      return Monster.findOneAndUpdate(
+      return Deck.findOneAndUpdate(
         { _id: deckId },
         { $set: updateFields },
         { new: true }
