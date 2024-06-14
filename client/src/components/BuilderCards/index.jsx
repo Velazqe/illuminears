@@ -2,9 +2,11 @@ import { Container, Typography, Card, CardContent, CardMedia, Button, CircularPr
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_DECK } from '../../utils/mutations';
+import SearchBar from '../SearchBar/searchBar';
 
 const BuilderCards = () => {
   const [cards, setCards] = useState([]);
+  const [initialCards, setInitialCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage] = useState(20);
@@ -27,12 +29,31 @@ const BuilderCards = () => {
       .then(data => {
         const lowercaseData = makeKeysLowercase(data);
         setCards(lowercaseData);
+        setInitialCards(lowercaseData);
         setLoading(false);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
+  };
+
+  const handleSearch = async (query) => {
+    console.log(query);
+    if (query.trim() === '') return;
+    try {
+      const response = await fetch(`https://api.lorcana-api.com/cards/fetch?search=Name~${query}`);
+      const data = await response.json();
+      const lowercaseData = makeKeysLowercase(data);
+      console.log(lowercaseData);
+      setCards(lowercaseData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const clearSearch = () => {
+    setCards(initialCards);
   };
 
   const handleCardClick = (card) => {
@@ -153,6 +174,10 @@ const BuilderCards = () => {
 
   return (
     <Box sx={{ margin: '10px 0px 10px 0px' }}>
+      <SearchBar onChange = {handleSearch}/>
+    <Button variant="contained" onClick={clearSearch} style={{ margin: '10px 0' }}>
+        Clear
+      </Button>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <Box sx={{ width: '100%', flexGrow: 1 }}>
           {loading ? (
