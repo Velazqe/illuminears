@@ -22,6 +22,7 @@ const Signup = () => {
       ...formState,
       [name]: value,
     });
+    console.log(formState);
   };
 
   const handleFormSubmit = async (event) => {
