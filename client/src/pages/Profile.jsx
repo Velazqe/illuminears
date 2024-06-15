@@ -1,4 +1,4 @@
-import { Container, Typography, Grid, Card, CardContent, CardMedia, CircularProgress } from '@mui/material';
+import { Container, Typography, Grid, Card, CardContent, CardMedia, CircularProgress, Button } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { QUERY_MY_DECKS } from "../utils/queries";
 import Auth from "../utils/auth";
@@ -36,17 +36,20 @@ const Profile = () => {
                 }
               }}
             >
+              {/* Display the deck name */}
+              <CardContent sx={{display: 'flex', justifyContent: 'space-between'}}>
+                <Button>Edit</Button>
+                <Typography variant="h6" sx={{color: 'black', display: 'flex', justifyContent: 'center'}}>{deck.deckName}</Typography>
+                <Button>Delete</Button>
+              </CardContent>
               {/* Display the first image of the deck */}
               <CardMedia
                 component="img"
                 image={deck.cards.length > 0 ? deck.cards[0].image : '/default-image.jpg'} // Use a default image if no cards in deck
                 alt={deck.deckName}
-                sx={{ width: '100%', height: '90%' }}
+                sx={{ width: '100%', height: '85%' }}
               />
-              {/* Display the deck name */}
-              <CardContent>
-                <Typography variant="h6" sx={{color: 'black', display: 'flex', justifyContent: 'center'}}>{deck.deckName}</Typography>
-              </CardContent>
+              
             </Card>
           </Grid>
         ))}
