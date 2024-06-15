@@ -90,14 +90,17 @@ export const REMOVE_CARD = gql`
 `;
 
 export const UPDATE_DECK = gql`
-  mutation updateDeck($deckId: ID!, $deckName: String, $cards: [String]) {
+  mutation updateDeck($deckId: ID!, $deckName: String, $cards: [CardInput]) {
     updateDeck(deckId: $deckId, deckName: $deckName, cards: $cards) {
       _id
-      cards {
-        _id
-        image
-      }
       deckName
+      cards {
+        image
+        name
+        type
+        card_num
+        count
+      }
     }
   }
 `;
