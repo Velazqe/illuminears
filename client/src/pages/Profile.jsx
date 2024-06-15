@@ -1,17 +1,39 @@
 import { Container, Typography, Grid, Card, CardContent, CardMedia, CircularProgress, Button } from '@mui/material';
-import { useQuery } from '@apollo/client';
+import { useEffect } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
 import { QUERY_MY_DECKS } from "../utils/queries";
+import { REMOVE_DECK } from "../utils/mutations";
 import Auth from "../utils/auth";
 
 const Profile = () => {
   // Fetching decks data using useQuery
-  const { loading, error, data } = useQuery(QUERY_MY_DECKS);
+  const { loading, error, data, refetch } = useQuery(QUERY_MY_DECKS);
+  const [removeDeck] = useMutation(REMOVE_DECK);
+
+  // Refetch data on component mount
+  useEffect(() => {
+    refetch(); 
+  }, [refetch]);
 
   // If data is loading, display CircularProgress
   if (loading) return <CircularProgress />;
 
   // If there's an error fetching data, display an error message
-  if (error) return <Typography variant="h6">Error fetching decks: {error.message}</Typography>;
+  if (error) return <Typography variant="h6">Error fetching decks: {error.message}</Typography>;  
+
+  // Delete the selected deck by ID
+  const deleteDeck = async (deckId) => {
+    try {
+      await removeDeck({
+        variables: { deckId }
+      });
+      console.log(`${deckId} deleted`);
+      // Recall QUERY_MY_DECKS to display current decks after deletion
+      refetch();
+    } catch (error) {
+      console.error("Error deleting deck:", error);
+    }
+  };
 
   return (
     <Container sx={{ flexGrow: 1, backgroundColor: 'background.secondary', paddingTop: '20px' }}>
@@ -36,11 +58,12 @@ const Profile = () => {
                 }
               }}
             >
-              {/* Display the deck name */}
               <CardContent sx={{display: 'flex', justifyContent: 'space-between'}}>
                 <Button>Edit</Button>
+                {/* Display the deck name */}
                 <Typography variant="h6" sx={{color: 'black', display: 'flex', justifyContent: 'center'}}>{deck.deckName}</Typography>
-                <Button>Delete</Button>
+                {/* Button to delete the deck */}
+                <Button onClick={() => deleteDeck(deck._id)}>Delete</Button>
               </CardContent>
               {/* Display the first image of the deck */}
               <CardMedia

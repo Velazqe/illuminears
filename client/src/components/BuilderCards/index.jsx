@@ -115,6 +115,8 @@ const BuilderCards = () => {
   };
 
   const handleSave = async () => {
+    console.log(deckTitle);
+    console.log(selectedCards);
     try {
       setSaving(true); // Start saving process
       const { data } = await addDeck({ variables: { deckName: deckTitle, cards: selectedCards } });

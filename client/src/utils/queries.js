@@ -50,6 +50,7 @@ export const QUERY_ME = gql`
 export const QUERY_MY_DECKS = gql`
 query MyDecks {
   myDecks {
+    _id
     deckName
     user_id
     cards {
