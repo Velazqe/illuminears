@@ -175,7 +175,7 @@ const BuilderCards = () => {
   return (
     <Box sx={{ margin: '10px 0px 10px 0px' }}>
       <SearchBar onChange = {handleSearch}/>
-    <Button variant="contained" onClick={clearSearch} style={{ margin: '10px 0' }}>
+    <Button variant="contained" onClick={clearSearch} style={{margin: '10px 0' }}>
         Clear
       </Button>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
