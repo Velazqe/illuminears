@@ -1,10 +1,10 @@
 import { Container, Typography, Card, CardContent, CardMedia, Button, CircularProgress, Grid, Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { ADD_DECK } from '../../utils/mutations';
+import { ADD_DECK, UPDATE_DECK } from '../../utils/mutations';
 import SearchBar from '../SearchBar/searchBar';
 
-const BuilderCards = () => {
+const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
   const [cards, setCards] = useState([]);
   const [initialCards, setInitialCards] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,11 +16,36 @@ const BuilderCards = () => {
   const [saving, setSaving] = useState(false); // State to track saving process
   const [deckTitle, setDeckTitle] = useState("Your Deck"); // State for deck title
   const [isEditingTitle, setIsEditingTitle] = useState(false); // State for editing title
-  const [addDeck, { error, data }] = useMutation(ADD_DECK);
+  const [addDeck] = useMutation(ADD_DECK);
+  const [updateDeck] = useMutation(UPDATE_DECK);
 
   useEffect(() => {
     fetchCards(currentPage);
   }, [currentPage]);
+
+  // Update deckTitle, selectedCards, and clickCount on prop change while in deck editing mode
+  useEffect(() => {
+    if (isEditing && selectedDeck) {
+      console.log(selectedDeck);
+      console.log(isEditing);
+      const cardsWithoutTypename = selectedDeck.cards.map(card => omitTypename(card));
+      console.log(cardsWithoutTypename);
+      setSelectedCards(cardsWithoutTypename);           
+      setDeckTitle(selectedDeck.deckName);
+      setClickCount(selectedDeck.cards?.length || 0); 
+    }
+  }, [isEditing, selectedDeck]);
+
+  const omitTypename = (obj) => {
+    if (!obj) return {}; // Handle undefined or null values
+    const newObj = {};
+    for (const key in obj) {
+      if (key !== '__typename') {
+        newObj[key] = obj[key];
+      }
+    }
+    return newObj;
+  };
 
   const fetchCards = (page) => {
     setLoading(true);
@@ -57,6 +82,7 @@ const BuilderCards = () => {
   };
 
   const handleCardClick = (card) => {
+    console.log(card);
     const cardIndex = selectedCards.findIndex(item => item.card_num === card.card_num);
 
     if (cardIndex === -1) {
@@ -114,7 +140,26 @@ const BuilderCards = () => {
     }
   };
 
+  const handleEdit = async () => {
+    console.log(deckTitle);
+    console.log(selectedCards);
+    console.log(selectedDeck._id);
+    try {
+      setSaving(true); // Start saving process
+      const { data } = await updateDeck({ variables: { deckId: selectedDeck._id, deckName: deckTitle, cards: selectedCards } });
+      console.log(data);
+      setSaved(true); // Update state to indicate cards are saved
+      setIsEditing(false);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSaving(false); // End saving process
+    }
+  }
+
   const handleSave = async () => {
+    console.log(deckTitle);
+    console.log(selectedCards);
     try {
       setSaving(true); // Start saving process
       const { data } = await addDeck({ variables: { deckName: deckTitle, cards: selectedCards } });
@@ -285,9 +330,15 @@ const BuilderCards = () => {
               </Box>
             ))}
             <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: '20px' }}>
+            {isEditing ? (
+              <Button color="secondary" variant="contained" onClick={handleEdit} disabled={selectedCards.length === 0 || saving}>
+                {saving ? <CircularProgress size={24} /> : 'Edit'}
+              </Button>
+            ) : (
               <Button color="secondary" variant="contained" onClick={handleSave} disabled={selectedCards.length === 0 || saving}>
                 {saving ? <CircularProgress size={24} /> : 'Save'}
               </Button>
+            )}            
               {saved && <Typography variant="body1" sx={{ color: 'green', marginTop: '10px', textAlign: 'center' }}>Cards Saved Successfully!</Typography>}
               <Button variant="contained" color="secondary" onClick={handleClearAll} sx={{ marginTop: '10px' }}>
                 Clear All

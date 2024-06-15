@@ -28,6 +28,8 @@ export const ADD_DECK = gql`
   mutation addDeck($deckName: String!, $cards: [CardInput]) {
     addDeck(deckName: $deckName, cards: $cards) {
       _id
+      deckName
+      user_id
       cards {
         _id
         image
@@ -54,7 +56,6 @@ export const ADD_DECK = gql`
         set_id
         count
       }
-      deckName
     }
   }
 `;
@@ -89,14 +90,17 @@ export const REMOVE_CARD = gql`
 `;
 
 export const UPDATE_DECK = gql`
-  mutation updateDeck($deckId: ID!, $deckName: String, $cards: [String]) {
+  mutation updateDeck($deckId: ID!, $deckName: String, $cards: [CardInput]) {
     updateDeck(deckId: $deckId, deckName: $deckName, cards: $cards) {
       _id
-      cards {
-        _id
-        image
-      }
       deckName
+      cards {
+        image
+        name
+        type
+        card_num
+        count
+      }
     }
   }
 `;
