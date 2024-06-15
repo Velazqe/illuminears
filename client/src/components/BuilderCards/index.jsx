@@ -84,8 +84,7 @@ const BuilderCards = () => {
     } else {
       return data;
     }
-}
-
+  }
 
   const handleRemoveCard = (card) => {
     const cardIndex = selectedCards.findIndex(item => item.card_num === card.card_num);
@@ -120,6 +119,11 @@ const BuilderCards = () => {
       const { data } = await addDeck({ variables: { deckName: deckTitle, cards: selectedCards } });
       console.log(data);
       setSaved(true); // Update state to indicate cards are saved
+      // Resetting the states
+      setSelectedCards([]);
+      setClickCount(0);
+      setDeckTitle("Your Deck");
+      setCurrentPage(1); // Reset page to 1
     } catch (e) {
       console.error(e);
     } finally {
@@ -131,7 +135,7 @@ const BuilderCards = () => {
     setSelectedCards([]);
     setClickCount(0);
     setSaved(false); // Reset saved state
-    setDeckTitle("Your Deck"); 
+    setDeckTitle("Your Deck");
   };
 
   const handleImageError = (event) => {
@@ -154,7 +158,6 @@ const BuilderCards = () => {
     setIsEditingTitle(false);
   };
 
-
   // Function to chunk array into groups of 4
   const chunkArray = (array, size) => {
     const chunkedArray = [];
@@ -174,8 +177,8 @@ const BuilderCards = () => {
 
   return (
     <Box sx={{ margin: '10px 0px 10px 0px' }}>
-      <SearchBar onChange = {handleSearch}/>
-    <Button variant="contained" onClick={clearSearch} style={{margin: '10px 0' }}>
+      <SearchBar onChange={handleSearch}/>
+      <Button variant="contained" onClick={clearSearch} style={{margin: '10px 0' }}>
         Clear
       </Button>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -246,60 +249,59 @@ const BuilderCards = () => {
           )}
           <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center', color: clickCount >= 60 ? 'inherit' : 'red' }}> {clickCount}/60 </Typography>
           {clickCount < 60 && (
-            <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center', color: 'red' }}>Invalid Deck</Typography>)}
-            {/* Display selected cards with counts */}
-            {['Character', 'Location', 'Action', 'Item'].map((type) => (
-              <Box key={type} sx={{ marginBottom: '20px' }}>
-                <Typography sx={{ display: 'flex', justifyContent: 'center' }} variant="h4">{type}</Typography>
-                <Grid container spacing={1}>
-                  {categorizedSelectedCards[type].map((selectedCard, index) => (
-                    <Grid item xs={3} key={`${selectedCard.card_num}-${index}`}>
-                      <Card
-                        sx={{
-                          width: '100%',
-                          height: 'auto', // Set a consistent height
-                          cursor: 'pointer',
-                          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                          transition: 'transform 0.2s ease-in-out',
-                          '&:hover': {
-                            transform: 'scale(2.3)', // Enlarge card on hover
-                            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-                          },
-                        }}
-                        onClick={() => handleRemoveCard(selectedCard)}
-                      >
-                        <CardMedia
-                          component="img"
-                          image={selectedCard.image}
-                          alt={selectedCard.name}
-                          onError={handleImageError}
-                          sx={{ width: '100%', height: '100%' }}
-                        />
-                        <Typography variant="body2" align="center" mt={1} sx={{ color: 'text.secondary', backgroundColor: 'secondary.main', margin: 0 }}>
-                          {`${selectedCard.count} / 4 Selected`}
-                        </Typography>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            ))}
-            <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: '20px' }}>
-              <Button color="secondary" variant="contained" onClick={handleSave} disabled={selectedCards.length === 0 || saving}>
-                {saving ? <CircularProgress size={24} /> : 'Save'}
-              </Button>
-              {saved && <Typography variant="body1" sx={{ color: 'green', marginTop: '10px', textAlign: 'center' }}>Cards Saved Successfully!</Typography>}
-              <Button variant="contained" color="secondary" onClick={handleClearAll} sx={{ marginTop: '10px' }}>
-                Clear All
-              </Button>
+            <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center', color: 'red' }}>Invalid Deck</Typography>
+          )}
+          {/* Display selected cards with counts */}
+          {['Character', 'Location', 'Action', 'Item'].map((type) => (
+            <Box key={type} sx={{ marginBottom: '20px' }}>
+              <Typography sx={{ display: 'flex', justifyContent: 'center' }} variant="h4">{type}</Typography>
+              <Grid container spacing={1}>
+                {categorizedSelectedCards[type].map((selectedCard, index) => (
+                  <Grid item xs={3} key={`${selectedCard.card_num}-${index}`}>
+                    <Card
+                      sx={{
+                        width: '100%',
+                        height: 'auto', // Set a consistent height
+                        cursor: 'pointer',
+                        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                        transition: 'transform 0.2s ease-in-out',
+                        '&:hover': {
+                          transform: 'scale(2.3)', // Enlarge card on hover
+                          boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                        },
+                      }}
+                      onClick={() => handleRemoveCard(selectedCard)}
+                    >
+                      <CardMedia
+                        component="img"
+                        image={selectedCard.image}
+                        alt={selectedCard.name}
+                        onError={handleImageError}
+                        sx={{ width: '100%', height: '100%' }}
+                      />
+                      <Typography variant="body2" align="center" mt={1} sx={{ color: 'text.secondary', backgroundColor: 'secondary.main', margin: 0 }}>
+                        {`${selectedCard.count} / 4 Selected`}
+                      </Typography>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
             </Box>
+          ))}
+          <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: '20px' }}>
+            <Button color="secondary" variant="contained" onClick={handleSave} disabled={selectedCards.length === 0 || saving}>
+              {saving ? <CircularProgress size={24} /> : 'Save'}
+            </Button>
+            {saved && <Typography variant="body1" sx={{ color: 'green', marginTop: '10px', textAlign: 'center' }}>Cards Saved Successfully!</Typography>}
+            <Button variant="contained" color="secondary" onClick={handleClearAll} sx={{ marginTop: '10px' }}>
+              Clear All
+            </Button>
           </Box>
         </Box>
       </Box>
-    );
-  };
-  
-  export default BuilderCards;
-  
+    </Box>
+  );
+};
 
+export default BuilderCards;
 
