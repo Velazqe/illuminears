@@ -347,7 +347,7 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
                 Clear All
               </Button>
             </Box>
-          ))}
+        
           <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: '20px' }}>
             <Button color="secondary" variant="contained" onClick={handleSave} disabled={selectedCards.length === 0 || saving}>
               {saving ? <CircularProgress size={24} /> : 'Save'}

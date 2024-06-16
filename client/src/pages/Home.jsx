@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import { Container, Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Auth from "../utils/auth";
+import backgroundImage from "../../public/Hero.avif";
 
 
 const Home = () => {
@@ -11,7 +12,7 @@ const Home = () => {
   };
 
   return (
-    <Container sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'column', backgroundColor: 'background.secondary' }}>
+    <Container sx={{backgroundImage:`url(${backgroundImage})`,backgroundPosition:'center',backgroundRepeat:'no-repeat', backgroundSize:'100%', display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'column', backgroundColor: 'background.main' }}>
        {Auth.loggedIn() ? (
         <>
         <Typography variant="h1" component="h1" sx={{ margin: '20px', textAlign: 'center'}}>
