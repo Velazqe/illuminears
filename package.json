@@ -1,7 +1,7 @@
 {
   "name": "illuminears",
   "version": "1.0.0",
-  "description": "",
+  "description": "Lorcana Deck Builder",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
