@@ -31,6 +31,7 @@ const MainCards = () => {
       });
   };
 
+
   const handleSearch = async (query) => {
     console.log(query);
     if (query.trim() === '') return;
@@ -159,3 +160,5 @@ const MainCards = () => {
 };
 
 export default MainCards;
+
+

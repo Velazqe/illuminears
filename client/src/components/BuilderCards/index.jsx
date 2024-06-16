@@ -1,4 +1,4 @@
-import { Container, Typography, Card, CardContent, CardMedia, Button, CircularProgress, Grid, Box } from '@mui/material';
+import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_DECK, UPDATE_DECK } from '../../utils/mutations';
@@ -30,9 +30,9 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
       console.log(isEditing);
       const cardsWithoutTypename = selectedDeck.cards.map(card => omitTypename(card));
       console.log(cardsWithoutTypename);
-      setSelectedCards(cardsWithoutTypename);           
+      setSelectedCards(cardsWithoutTypename);
       setDeckTitle(selectedDeck.deckName);
-      setClickCount(selectedDeck.cards?.length || 0); 
+      setClickCount(selectedDeck.cards?.length || 0);
     }
   }, [isEditing, selectedDeck]);
 
@@ -203,6 +203,13 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
     setIsEditingTitle(false);
   };
 
+  
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleTitleBlur();
+    }
+  };
+
   // Function to chunk array into groups of 4
   const chunkArray = (array, size) => {
     const chunkedArray = [];
@@ -235,133 +242,124 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
           ) : (
             <Grid container spacing={3}>
               {cards.map((card) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={card.card_num}>
-                  <Card
-                    sx={{
-                      width: '100%',
-                      height: "100%",
-                      cursor: 'pointer',
-                      transition: 'transform 0.2s ease-in-out', // Add transition for smooth effect
-                      '&:hover': {
-                        transform: 'scale(1.3)', // Enlarge card on hover
-                        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-                      }
-                    }}
-                    onClick={() => handleCardClick(card)}
-                  >
-                    <CardContent sx={{ width: '100%', height: "100%", padding: 0, paddingBottom: '0 !important' }}>
-                      <CardMedia
-                        component="img"
-                        image={card.image}
-                        alt={card.name}
-                        onError={handleImageError}
-                        sx={{ width: '100%', height: "100%" }}
-                      />
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          )}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
-            <Button variant="contained" onClick={handlePreviousPage} disabled={currentPage === 1}>
-              Previous
-            </Button>
-            <Typography variant="body1"> Page {currentPage} </Typography>
-            <Button variant="contained" onClick={handleNextPage}>
-              Next
-            </Button>
-          </Box>
-        </Box>
-        <Box sx={{ marginLeft: '20px', width: '500px' }}>
-          {isEditingTitle ? (
-            <input
-              type="text"
-              value={deckTitle}
-              onChange={handleTitleChange}
-              onBlur={handleTitleBlur}
-              style={{ fontSize: '1.5rem', marginBottom: '10px', width: '100%' }}
-              autoFocus
-            />
-          ) : (
-            <Typography
-              variant="h3"
-              style={{ display: 'flex', cursor: 'pointer', marginBottom: '10px', justifyContent: 'center' }}
-              onClick={handleEditTitle}
-            >
-              {deckTitle}
-            </Typography>
-          )}
-          <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center', color: clickCount >= 60 ? 'inherit' : 'red' }}> {clickCount}/60 </Typography>
-          {clickCount < 60 && (
-            <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center', color: 'red' }}>Invalid Deck</Typography>)}
-            {/* Display selected cards with counts */}
-            {['Character', 'Location', 'Action', 'Item'].map((type) => (
-              <Box key={type} sx={{ marginBottom: '20px' }}>
-                <Typography sx={{ display: 'flex', justifyContent: 'center' }} variant="h4">{type}</Typography>
-                <Grid container spacing={1}>
-                  {categorizedSelectedCards[type].map((selectedCard, index) => (
-                    <Grid item xs={3} key={`${selectedCard.card_num}-${index}`}>
-                      <Card
-                        sx={{
-                          width: '100%',
-                          height: 'auto', // Set a consistent height
-                          cursor: 'pointer',
-                          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                          transition: 'transform 0.2s ease-in-out',
-                          '&:hover': {
-                            transform: 'scale(2.3)', // Enlarge card on hover
-                            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-                          },
-                        }}
-                        onClick={() => handleRemoveCard(selectedCard)}
-                      >
-                        <CardMedia
-                          component="img"
-                          image={selectedCard.image}
-                          alt={selectedCard.name}
-                          onError={handleImageError}
-                          sx={{ width: '100%', height: '100%' }}
+                                <Grid item xs={12} sm={6} md={4} lg={3} key={card.card_num}>
+                                <Card
+                                  sx={{
+                                    width: '100%',
+                                    height: "100%",
+                                    cursor: 'pointer',
+                                    transition: 'transform 0.2s ease-in-out', // Add transition for smooth effect
+                                    '&:hover': {
+                                      transform: 'scale(1.3)', // Enlarge card on hover
+                                      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                                    }
+                                  }}
+                                  onClick={() => handleCardClick(card)}
+                                >
+                                  <CardContent sx={{ width: '100%', height: "100%", padding: 0, paddingBottom: '0 !important' }}>
+                                    <CardMedia
+                                      component="img"
+                                      image={card.image}
+                                      alt={card.name}
+                                      onError={handleImageError}
+                                      sx={{ width: '100%', height: "100%" }}
+                                    />
+                                  </CardContent>
+                                </Card>
+                              </Grid>
+                            ))}
+                        </Grid>
+                      )}
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+                        <Button variant="contained" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                          Previous
+                        </Button>
+                        <Typography variant="body1"> Page {currentPage} </Typography>
+                        <Button variant="contained" onClick={handleNextPage}>
+                          Next
+                        </Button>
+                      </Box>
+                    </Box>
+                    <Box sx={{ marginLeft: '20px', width: '500px' }}>
+                      {isEditingTitle ? (
+                        <input
+                          type="text"
+                          value={deckTitle}
+                          onChange={handleTitleChange}
+                          onBlur={handleTitleBlur}
+                          onKeyPress={handleKeyPress} // Handle Enter key press to save title change
+                          style={{ fontSize: '1.5rem', marginBottom: '10px', width: '100%' }}
+                          autoFocus
                         />
-                        <Typography variant="body2" align="center" mt={1} sx={{ color: 'text.secondary', backgroundColor: 'secondary.main', margin: 0 }}>
-                          {`${selectedCard.count} / 4 Selected`}
+                      ) : (
+                        <Typography
+                          variant="h3"
+                          style={{ display: 'flex', cursor: 'pointer', marginBottom: '10px', justifyContent: 'center' }}
+                          onClick={handleEditTitle}
+                        >
+                          {deckTitle}
                         </Typography>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            ))}
-            <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: '20px' }}>
-            {isEditing ? (
-              <Button color="secondary" variant="contained" onClick={handleEdit} disabled={selectedCards.length === 0 || saving}>
-                {saving ? <CircularProgress size={24} /> : 'Edit'}
-              </Button>
-            ) : (
-              <Button color="secondary" variant="contained" onClick={handleSave} disabled={selectedCards.length === 0 || saving}>
-                {saving ? <CircularProgress size={24} /> : 'Save'}
-              </Button>
-            )}            
-              {saved && <Typography variant="body1" sx={{ color: 'green', marginTop: '10px', textAlign: 'center' }}>Cards Saved Successfully!</Typography>}
-              <Button variant="contained" color="secondary" onClick={handleClearAll} sx={{ marginTop: '10px' }}>
-                Clear All
-              </Button>
-            </Box>
-        
-          <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: '20px' }}>
-            <Button color="secondary" variant="contained" onClick={handleSave} disabled={selectedCards.length === 0 || saving}>
-              {saving ? <CircularProgress size={24} /> : 'Save'}
-            </Button>
-            {saved && <Typography variant="body1" sx={{ color: 'green', marginTop: '10px', textAlign: 'center' }}>Cards Saved Successfully!</Typography>}
-            <Button variant="contained" color="secondary" onClick={handleClearAll} sx={{ marginTop: '10px' }}>
-              Clear All
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
-  );
-};
-
-export default BuilderCards;
-
+                      )}
+                      <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center', color: clickCount >= 60 ? 'inherit' : 'red' }}> {clickCount}/60 </Typography>
+                      {clickCount < 60 && (
+                        <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center', color: 'red' }}>Invalid Deck</Typography>)}
+                        {/* Display selected cards with counts */}
+                        {['Character', 'Location', 'Action', 'Item'].map((type) => (
+                          <Box key={type} sx={{ marginBottom: '20px' }}>
+                            <Typography sx={{ display: 'flex', justifyContent: 'center' }} variant="h4">{type}</Typography>
+                            <Grid container spacing={1}>
+                              {categorizedSelectedCards[type].map((selectedCard, index) => (
+                                <Grid item xs={3} key={`${selectedCard.card_num}-${index}`}>
+                                  <Card
+                                    sx={{
+                                      width: '100%',
+                                      height: 'auto', // Set a consistent height
+                                      cursor: 'pointer',
+                                      boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                                      transition: 'transform 0.2s ease-in-out',
+                                      '&:hover': {
+                                        transform: 'scale(2.3)', // Enlarge card on hover
+                                        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                                      },
+                                    }}
+                                    onClick={() => handleRemoveCard(selectedCard)}
+                                  >
+                                    <CardMedia
+                                      component="img"
+                                      image={selectedCard.image}
+                                      alt={selectedCard.name}
+                                      onError={handleImageError}
+                                      sx={{ width: '100%', height: '100%' }}
+                                    />
+                                    <Typography variant="body2" align="center" mt={1} sx={{ color: 'text.secondary', backgroundColor: 'secondary.main', margin: 0 }}>
+                                      {`${selectedCard.count} / 4 Selected`}
+                                    </Typography>
+                                  </Card>
+                                </Grid>
+                              ))}
+                            </Grid>
+                          </Box>
+                        ))}
+                        <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: '20px' }}>
+                        {isEditing ? (
+                          <Button color="secondary" variant="contained" onClick={handleEdit} disabled={selectedCards.length === 0 || saving}>
+                            {saving ? <CircularProgress size={24} /> : 'Edit'}
+                          </Button>
+                        ) : (
+                          <Button color="secondary" variant="contained" onClick={handleSave} disabled={selectedCards.length === 0 || saving}>
+                            {saving ? <CircularProgress size={24} /> : 'Save'}
+                          </Button>
+                        )}            
+                          {saved && <Typography variant="body1" sx={{ color: 'green', marginTop: '10px', textAlign: 'center' }}>Cards Saved Successfully!</Typography>}
+                          <Button variant="contained" color="secondary" onClick={handleClearAll} sx={{ marginTop: '10px' }}>
+                            Clear All
+                          </Button>
+                        </Box>
+                    </Box>
+                  </Box>
+                </Box>
+              );
+            };
+            
+            export default BuilderCards;
+            

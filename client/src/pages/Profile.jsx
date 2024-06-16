@@ -64,7 +64,7 @@ const Profile = () => {
                   sx={{
                     backgroundColor: 'secondary.main',
                     width: '100%',
-                    height: '100%',
+                    height: '86%',
                     cursor: 'pointer',
                     transition: 'transform 0.2s ease-in-out',
                     '&:hover': {
@@ -74,22 +74,23 @@ const Profile = () => {
                   }}
                 >
                   <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Button onClick={() => editDeck(deck)}>Edit</Button>
-                    {/* Display the deck name */}
-                    <Typography variant="h6" sx={{ color: 'black', display: 'flex', justifyContent: 'center' }}>
+                    <Typography variant="h5" sx={{ color: 'black',textAlign:'center', width:'100%' }}>
                       {deck.deckName}
                     </Typography>
                     {/* Button to delete the deck */}
-                    <Button onClick={() => deleteDeck(deck._id)}>Delete</Button>
+                    {/* <Button onClick={() => deleteDeck(deck._id)}>Delete</Button> */}
                   </CardContent>
                   {/* Display the first image of the deck */}
                   <CardMedia
                     component="img"
                     image={deck.cards.length > 0 ? deck.cards[0].image : '/default-image.jpg'} // Use a default image if no cards in deck
                     alt={deck.deckName}
-                    sx={{ width: '100%', height: '85%' }}
+                    sx={{objectFit:'contain' }}
                   />
                 </Card>
+                <Button variant="contained" sx={{marginTop:'30px'}} onClick={() => editDeck(deck)}>Edit</Button>
+                    {/* Button to delete the deck */}
+                    <Button variant="contained" sx={{display:'flex', float:'right', marginTop:'30px'}} onClick={() => deleteDeck(deck._id)}>Delete</Button>
               </Grid>
             ))}
           </Grid>
