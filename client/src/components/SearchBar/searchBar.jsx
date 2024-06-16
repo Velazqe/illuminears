@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Box, Button, TextField } from '@mui/material';
 
 const SearchBar = ({ onChange }) => {
   const [query, setQuery] = useState('');
@@ -11,19 +12,36 @@ const SearchBar = ({ onChange }) => {
     console.log("Its running");
     onChange(query);
   };
-  
+
   return (
-    <div className='searchbar'>
-      <input
-        type="text"
+    <Box 
+      sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        width: '100%', 
+        padding: '20px', 
+        backgroundColor: 'background.main' 
+      }}
+    >
+      <TextField
+        fullWidth
+        variant="outlined"
         value={query}
         onChange={handleInputChange}
         placeholder="Search..."
+        sx={{ marginRight: '10px' }}
       />
-      <button onClick={handleSearch}>Search</button>
-    </div>
+      <Button 
+        variant="contained" 
+        onClick={handleSearch}
+        sx={{ padding: '10px 20px' }}
+      >
+        Search
+      </Button>
+    </Box>
   );
 };
 
-
 export default SearchBar;
+

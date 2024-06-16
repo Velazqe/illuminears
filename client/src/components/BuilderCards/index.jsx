@@ -110,8 +110,7 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
     } else {
       return data;
     }
-}
-
+  }
 
   const handleRemoveCard = (card) => {
     const cardIndex = selectedCards.findIndex(item => item.card_num === card.card_num);
@@ -165,6 +164,11 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
       const { data } = await addDeck({ variables: { deckName: deckTitle, cards: selectedCards } });
       console.log(data);
       setSaved(true); // Update state to indicate cards are saved
+      // Resetting the states
+      setSelectedCards([]);
+      setClickCount(0);
+      setDeckTitle("Your Deck");
+      setCurrentPage(1); // Reset page to 1
     } catch (e) {
       console.error(e);
     } finally {
@@ -176,7 +180,7 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
     setSelectedCards([]);
     setClickCount(0);
     setSaved(false); // Reset saved state
-    setDeckTitle("Your Deck"); 
+    setDeckTitle("Your Deck");
   };
 
   const handleImageError = (event) => {
@@ -199,7 +203,6 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
     setIsEditingTitle(false);
   };
 
-
   // Function to chunk array into groups of 4
   const chunkArray = (array, size) => {
     const chunkedArray = [];
@@ -219,8 +222,8 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
 
   return (
     <Box sx={{ margin: '10px 0px 10px 0px' }}>
-      <SearchBar onChange = {handleSearch}/>
-    <Button variant="contained" onClick={clearSearch} style={{ margin: '10px 0' }}>
+      <SearchBar onChange={handleSearch}/>
+      <Button variant="contained" onClick={clearSearch} style={{margin: '10px 0' }}>
         Clear
       </Button>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -344,13 +347,21 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
                 Clear All
               </Button>
             </Box>
+          ))}
+          <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: '20px' }}>
+            <Button color="secondary" variant="contained" onClick={handleSave} disabled={selectedCards.length === 0 || saving}>
+              {saving ? <CircularProgress size={24} /> : 'Save'}
+            </Button>
+            {saved && <Typography variant="body1" sx={{ color: 'green', marginTop: '10px', textAlign: 'center' }}>Cards Saved Successfully!</Typography>}
+            <Button variant="contained" color="secondary" onClick={handleClearAll} sx={{ marginTop: '10px' }}>
+              Clear All
+            </Button>
           </Box>
         </Box>
       </Box>
-    );
-  };
-  
-  export default BuilderCards;
-  
+    </Box>
+  );
+};
 
+export default BuilderCards;
 
