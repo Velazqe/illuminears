@@ -13,7 +13,6 @@ import Profile from "./pages/Profile";
 import ErrorPage from "./pages/ErrorPage";
 import Cards from "./pages/Cards";
 import Builder from "./pages/Builder";
-import Logout from "./pages/Logout";
 
 
 
@@ -34,10 +33,6 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
-      },
-      {
-        path: "/logout",
-        element: <Logout />
       },
       {
         path: "/profile",

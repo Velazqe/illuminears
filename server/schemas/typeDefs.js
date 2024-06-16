@@ -15,7 +15,7 @@ const typeDefs = `
   }
 
   type Card {
-  _id: ID
+   _id: ID
   artist: String
   set_name: String
   classifications: String
@@ -27,18 +27,18 @@ const typeDefs = `
   cost: Int
   inkable: Boolean
   name: String!
-  type: String
+  type: String!
   lore: Int
   rarity: String
   flavor_text: String
   unique_id: String
-  card_num: Int
+  card_num: Int!
   body_text: String
   willpower: Int
   card_variants: String
   strength: Int
   set_id: String
-  count: Int
+  count: Int!
   }
 
 input CardInput {
@@ -54,18 +54,18 @@ input CardInput {
   cost: Int
   inkable: Boolean
   name: String!
-  type: String
+  type: String!
   lore: Int
   rarity: String
   flavor_text: String
   unique_id: String
-  card_num: Int
+  card_num: Int!
   body_text: String
   willpower: Int
   card_variants: String
   strength: Int
   set_id: String
-  count: Int
+  count: Int!
 }
 
   type Auth {
