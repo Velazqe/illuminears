@@ -16,6 +16,7 @@ Welcome to the Lorcana Deck Builder! This website is a tool for fans of the Disn
   * [License](#license)
   * [Contact](#contact)
 
+
 ## Features
 
 - **Create Decks**: Build your own custom decks using a wide variety of cards.
@@ -24,6 +25,16 @@ Welcome to the Lorcana Deck Builder! This website is a tool for fans of the Disn
 - **Edit Deck Names**: Personalize your decks by changing their names.
 
 ## Technologies Used
+
+  - React
+  - Material-UI
+  - Node.js
+  - Express
+  - MongoDB
+  - JWT (JSON Web Tokens)
+  - Render
+  - Apollo 
+ 
 
 - **Frontend**:
   - React
@@ -90,7 +101,7 @@ To set up the project locally, follow these steps:
 
 ## Deployment
 
-The Lorcana Deck Builder is hosted on Render. You can access the live application using the following link:
+The Lorcana Deck Builder is hosted on Render. You can access the live application using the following link: 
 
 [Lorcana Deck Builder on Render](https://your-app-url-on-render.com)
 
@@ -127,3 +138,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 For any questions or suggestions, feel free to open an issue or contact us directly.
+    - Nicholas Poulson: https://github.com/42Salokin
+    - Justin Ramos: https://github.com/Jramos20022    
+    - Emanuel Velazquez: https://github.com/Velazqe
