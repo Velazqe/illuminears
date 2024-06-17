@@ -62,7 +62,7 @@ const Profile = () => {
               <Grid item xs={12} sm={6} md={4} lg={3} key={deck._id}>
                 <Card
                   sx={{
-                    backgroundColor: 'secondary.main',
+                    backgroundColor:'secondary.main',
                     width: '100%',
                     height: '86%',
                     cursor: 'pointer',
