@@ -4,7 +4,7 @@ import BuilderCards from '../components/BuilderCards';
 const Builder = () => {
 
     return (
-      <Container sx={{ display: 'flex', flexGrow: 1,  alignItems: 'center', justifyContent: 'center',  backgroundColor: 'background.secondary' }}>
+      <Container sx={{ flexGrow: 1, backgroundColor: 'background.secondary', paddingTop: '20px' }}>
          <BuilderCards />   
       </Container>
     );
