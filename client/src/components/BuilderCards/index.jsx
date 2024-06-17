@@ -52,7 +52,9 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
     fetch(`https://api.lorcana-api.com/cards/fetch?page=${page}&pagesize=${cardsPerPage}`)
       .then(response => response.json())
       .then(data => {
+        // console.log(data);
         const lowercaseData = makeKeysLowercase(data);
+        // findUnknownKeysInArray(data);
         setCards(lowercaseData);
         setInitialCards(lowercaseData);
         setLoading(false);
@@ -109,6 +111,36 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
       }
     } else {
       return data;
+    }
+  }
+
+  function findUnknownKeysInArray(data, knownCardKeys = [
+    "artist", "set_name", "classifications", "abilities", "set_num",
+    "color", "franchise", "image", "cost", "inkable", "name", "type",
+    "lore", "rarity", "flavor_text", "unique_id", "card_num", "body_text",
+    "willpower", "card_variants", "strength", "set_id", "count"
+  ]) {
+    console.log(data);
+    if (!Array.isArray(data)) {
+      return; // Handle non-array data (avoid errors)
+    }
+  
+    for (const obj of data) {
+      if (typeof obj !== 'object' || obj === null) {
+        continue; // Skip non-object elements in the array
+      }
+  
+      const unknownKeys = [];
+      for (const key in obj) {
+        const lowercasedKey = key.toLowerCase();
+        if (!knownCardKeys.includes(lowercasedKey)) {
+          unknownKeys.push(lowercasedKey);
+        }
+      }
+  
+      if (unknownKeys.length > 0) {
+        console.log(`Unknown keys found in object: ${unknownKeys.join(', ')}`);
+      }
     }
   }
 

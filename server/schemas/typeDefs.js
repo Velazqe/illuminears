@@ -38,6 +38,7 @@ const typeDefs = `
   card_variants: String
   strength: Int
   set_id: String
+  move_cost: Int
   count: Int!
   }
 
@@ -65,6 +66,7 @@ input CardInput {
   card_variants: String
   strength: Int
   set_id: String
+  move_cost: Int
   count: Int!
 }
 
