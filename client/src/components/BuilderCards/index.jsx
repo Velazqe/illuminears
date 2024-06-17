@@ -54,7 +54,7 @@ const BuilderCards = ({ selectedDeck, isEditing, setIsEditing }) => {
       .then(data => {
         // console.log(data);
         const lowercaseData = makeKeysLowercase(data);
-        findUnknownKeysInArray(data);
+        // findUnknownKeysInArray(data);
         setCards(lowercaseData);
         setInitialCards(lowercaseData);
         setLoading(false);
