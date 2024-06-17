@@ -79,6 +79,9 @@ const deckSchema = new Schema({
       set_id: {
         type: String
       },
+      move_cost: {
+        type: Number
+      },
       count: {
         type: Number
       },
