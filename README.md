@@ -1,7 +1,20 @@
-
 # Lorcana Deck Builder
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Welcome to the Lorcana Deck Builder! This website is a tool for fans of the Disney card game Lorcana to create, edit, and save their decks. You can also edit deck names and save decks to your user profile.
+
+![Alt text](./client/public/Screenshot.png)
+
+  ## Table of Contents
+
+  * [Features](#features)
+  * [Technologies](#technologies-used)
+  * [Installation](#installation)
+  * [Usage](#usage)
+  * [Deployment](#deployment)
+  * [Contributing](#contributing)
+  * [License](#license)
+  * [Contact](#contact)
 
 ## Features
 
