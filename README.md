@@ -103,7 +103,7 @@ To set up the project locally, follow these steps:
 
 The Lorcana Deck Builder is hosted on Render. You can access the live application using the following link: 
 
-[Lorcana Deck Builder on Render](https://your-app-url-on-render.com)
+[Lorcana Deck Builder on Render](https://illuminears-quest.onrender.com/)
 
 ## Contributing
 
